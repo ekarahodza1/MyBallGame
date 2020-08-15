@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/pozadina"
+        android:src="@drawable/trava"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-16dp" />
 
@@ -45,23 +45,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rupa1" />
 
+
     <ImageView
         android:id="@+id/rupa4"
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:layout_marginTop="140dp"
-        android:layout_marginEnd="184dp"
+        android:layout_marginEnd="148dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rupa1" />
-
 
     <ImageView
         android:id="@+id/rupa5"
         android:layout_width="120dp"
         android:layout_height="100dp"
-        android:layout_marginTop="260dp"
-        android:layout_marginEnd="276dp"
+        android:layout_marginTop="240dp"
+        android:layout_marginEnd="268dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rupa1" />
@@ -70,9 +70,10 @@
         android:id="@+id/rupa"
         android:layout_width="120dp"
         android:layout_height="100dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="244dp"
         android:layout_marginEnd="16dp"
-        android:tint="@android:color/holo_orange_dark"
+        android:tint="@android:color/holo_green_light"
+        android:tintMode="src_atop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rupa1" />
@@ -83,6 +84,7 @@
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:tint="@android:color/holo_red_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/loptica"></ImageView>
