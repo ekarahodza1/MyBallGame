@@ -1,11 +1,14 @@
 package com.example.mygame;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.widgets.Rectangle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +18,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,8 +36,15 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private Handler handler = new Handler();
 
     private ImageView rupa1, rupa2, rupa3, rupa4, rupa5, rupa;
+    private int score = 0;
 
-
+    private Rect ballRect = new Rect();
+    private Rect rupaRect = new Rect();
+    private Rect rupa1Rect = new Rect();
+    private Rect rupa2Rect = new Rect();
+    private Rect rupa3Rect = new Rect();
+    private Rect rupa4Rect = new Rect();
+    private Rect rupa5Rect = new Rect();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,27 +71,17 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!touchImage()) {
-                            new AlertDialog.Builder(getBaseContext())
-                                    .setTitle("You lost")
-                                    .setMessage("Try again?")
+                        if (detectCollision() == -1) {
+                            Toast.makeText(getBaseContext(), "You reached the ball with " +  score/10 + " hits!",  Toast.LENGTH_SHORT).show();
 
-                                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                                    // The dialog is automatically dismissed when a dialog button is clicked.
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Continue with delete operation
-                                        }
-                                    })
-
-                                    // A null listener allows the button to dismiss the dialog and take no further action.
-                                    .setNegativeButton("No", null)
-                                    .show();
+                        }
+                        else if (detectCollision() == 1) {
+                            score++;
                         }
                     }
                 });
             }
-        }, 0, 20);
+        }, 0, 40);
 
 
     }
@@ -95,33 +96,32 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         System.out.println(ballX);
 
         if (ballY < 0) ballY = 0;
-        if (ballY > frame.getHeight()) ballY = frame.getHeight();
+        if (ballY > frame.getHeight() - ball.getHeight()) ballY = frame.getHeight() - ball.getHeight();
 
         if (ballX < 0) ballX = 0;
-        if (ballX > frame.getWidth()) ballX = frame.getWidth();
+        if (ballX > frame.getWidth() - ball.getWidth()) ballX = frame.getWidth() - ball.getWidth();
 
         ball.setX(ballX);
         ball.setY(ballY);
     }
 
-    public boolean touchImage () {
-        float ballHeight = ball.getHeight();
-        float ballWidth = ball.getWidth();
-        float imageHight = rupa1.getHeight();
-        float imageWidth = rupa1.getWidth();
+    public int detectCollision () {
+        ball.getHitRect(ballRect);
+        rupa.getHitRect(rupaRect);
+        rupa1.getHitRect(rupa1Rect);
+        rupa2.getHitRect(rupa2Rect);
+        rupa3.getHitRect(rupa3Rect);
+        rupa4.getHitRect(rupa4Rect);
+        rupa5.getHitRect(rupa5Rect);
 
-        if ((ball.getX() + ballWidth >= rupa1.getX() && ball.getX() <= rupa1.getX() + imageWidth) &&
-                (ball.getY() >= rupa1.getY() && ball.getY() <= rupa1.getY() + imageHight)) return false;
-        if ((ball.getX() + ballWidth >= rupa2.getX() && ball.getX() <= rupa2.getX() + imageWidth) &&
-                (ball.getY() >= rupa2.getY() && ball.getY() <= rupa2.getY() + imageHight)) return false;
-        if ((ball.getX() + ballWidth >= rupa3.getX() && ball.getX() <= rupa3.getX() + imageWidth) &&
-                (ball.getY() >= rupa3.getY() && ball.getY() <= rupa3.getY() + imageHight)) return false;
-        if ((ball.getX() + ballWidth >= rupa4.getX() && ball.getX() <= rupa4.getX() + imageWidth) &&
-                (ball.getY() >= rupa4.getY() && ball.getY() <= rupa4.getY() + imageHight)) return false;
-        if ((ball.getX() + ballWidth >= rupa5.getX() && ball.getX() <= rupa5.getX() + imageWidth) &&
-                (ball.getY() >= rupa5.getY() && ball.getY() <= rupa5.getY() + imageHight)) return false;
+        if (ballRect.intersect(rupa1Rect) || ballRect.intersect(rupa2Rect) ||
+                ballRect.intersect(rupa3Rect) || ballRect.intersect(rupa4Rect) || ballRect.intersect(rupa5Rect)) {
+            return 1;
+        }
+        else if (ballRect.intersect(rupaRect)) return -1;
+        else return 0;
 
-        return true;
+
     }
 
     @Override
@@ -146,4 +146,6 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
         mSensorManager.unregisterListener(this);
     }
+
+
 }
